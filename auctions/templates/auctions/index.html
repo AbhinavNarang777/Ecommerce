@@ -1,0 +1,43 @@
+{%extends "auctions/layout.html%}
+
+{%load static%}
+
+    <style>
+        .container-fluid{
+            height: 300px;
+            width: 90%;
+            margin-top: 2%;
+            margin-left: 5%;
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        }
+
+        .col-md-4{
+            padding: 1% 1%;
+        }
+
+        .col-mid-4 img{
+            height: 280px;
+            width: 100%
+        }
+    </style>
+    <h2>Active Listings</h2>
+    <hr>
+    {%for item in items}
+    <div class="container-fluid" style="border-radius:5px ;">
+        <div class="row">
+            <div class="col-mid-4">
+                <img src="{{item.photo.url}}" alt="">
+            </div>
+            <div class="col-md-8">
+                <div style="padding: 4% 4%;">
+                    <h2>{{item.title}}</h2>
+                    <h5 style="margin-top:1%;"><strong>Price</strong> : {{item.start_price}}</h5>
+                    <p style="font-weight: light; margin-top: 5%;">Created {{item.time}}</p>
+                    <a href="{% url 'item' item.title%">Open</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {%endfor%}
+{%endblock%}

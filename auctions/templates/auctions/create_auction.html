@@ -1,0 +1,50 @@
+{%extends "auction/layout.html" %}
+
+{%block body%}
+
+<style>
+    .content{
+        padding: 2% 2%;
+    }
+    .container-fluid{
+        height: auto;
+        width: 90%;
+        margin-top: 2%;
+        margin-left: 5%;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    }
+</style>
+    <h2>Create a Listing</h2>
+
+    <div class="container-fluid">
+        <div class="content">
+            <form action="{%url 'create' %}" method="post">
+                {%csrf_token%}
+                <div class="form-group">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="desc">Description</label>
+                    <textarea class="form-control" name="description" id="desc" cols="10" rows="4" maxlength="1000" required></textarea>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" class="form-control" name="price" id="price" min="1" required>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="formFile" class="form-label">Default file input example</label>
+                    <input type="file" class="form-control" id="formFile" name="image" required>
+                </div>
+
+                <input type="submit" class="btn btn-primary">
+            </form>
+        </div>
+
+    </div>
+
+{%endblock%}

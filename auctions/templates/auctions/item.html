@@ -1,0 +1,112 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <style>
+        .container-fluid{
+            height:auto;
+            width: 90%;
+            margin-top: 2%;
+            margin-left: 5%;
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        }
+
+        .image{
+            padding: 2% 2%;
+        }
+
+        .image img{
+            width: 60%;
+            height: 400px;
+        }
+        .content{
+            padding: 2% 2%;
+        }
+    </style>
+
+    {% if closed%}
+        <h1><center style="color: red;">Sorry, this auction is closed</center></h1>
+        <h1 style="margin-top: 10%;"><center style="color: green;">The Winner is{{bid.user.username}}</center></h1>
+    {%else%}
+    <h2>Listing : {{item.title}}</h2>
+
+    <div class="container-fluid">
+        <div class="image">
+            <img src="{{item.photo.url}}" alt="">
+        </div>
+        <div class="content">
+            <span style="font-weight: normal; font-size: large;">Description: {{item.description}}</span>
+        </div>
+
+        <hr>
+
+        {%if user.is_authenticated%}
+        <form action="{% url 'bid' item.title%}" method="post">
+            {%csrf_token%}
+            <div class="form-group">
+                <label for="bid">{{bid_count}} bid(s) placed so far</label>
+                <input type="number" class="form-control" id="bid" placeholder="Enter bid amount" name="bid" min="{{item.start_price}}" required>
+            </div>
+            <input type="submit" value="Enter Bid" class="btn btn-primary">
+        </form>
+        <hr>
+        {%else%}
+        {{bid_count}} bid(s) placed so far
+        <p>To place a bid, please <a href="{%url 'login.html'%}">Login</a> </p>
+        <hr>
+        {%endif%}
+        <h3>Details</h3>
+        <ul>
+            <li>Listed By: {{item.seller}}</li>
+            <li>Created: {{item.time}}</li>
+        </ul>
+        <hr>
+
+        {%if option_for_close%}
+            <a href="{url 'closed' item.title}" class="btn btn-danger">Close the auction</a>
+        {%endif%}
+
+        {% if user.is_authenticated %}
+            {% if added %}
+                <p>{{added}}</p>
+                <a type="button" class="btn btn-danger" href="{% url 'rem_wish' item.title%}">Remove from Wishlist</a>
+            {% elif absent %}
+                <p>{{absent}}</p>
+                <a type="button" class="btn btn-primary" href="{% url 'add_wish' item.title%}">Add to Wishlist</a>
+            {% endif %}
+            <hr>
+        {% endif %}
+
+        <h3>Comments</h3>
+        <ul>
+            {%for comment in comments%}
+            <li>
+                <div class="container" style="min-height: 100px;max-height: auto;">
+                    <h3>{{comment.user}}</h3>
+                    
+                    {{comment.comment}}
+                </div>
+            </li>
+            
+        {% endfor %}
+        {% if user.is_authenticated %}
+            <li>
+                <form action="{% url 'comment' item.title %}" method="post">
+                {% csrf_token %}
+                <h5>Add a comment</h5>
+                <div class="form-group">
+                    <textarea name="comment" id="" cols="15" rows="5" class="form-control" required></textarea>
+                </div>
+                <input type="submit" class="btn btn-primary">
+                </form>
+            
+            </li>
+            
+            {% endif %}
+        </ul>
+        
+    </div>
+    {% endif%}    
+        </div>
+        
+        
+{% endblock %}
